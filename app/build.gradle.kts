@@ -45,7 +45,7 @@ android {
 
     defaultConfig {
         applicationId = "com.capella.ai"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 200_000_150
         check(versionCode == currentVersionCode)

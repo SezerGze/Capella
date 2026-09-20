@@ -120,7 +120,7 @@ private const val INTERVAL_DAY = 86_400_000L
 private const val INTERVAL_WEEK = 86_400_000L * 7
 private const val INTERVAL_MONTH = 86_400_000L * 30
 
-const val DEFAULT_INTERVAL = INTERVAL_WEEK // every week
+const val DEFAULT_INTERVAL = INTERVAL_DAY // Capella: gunluk kontrol
 
 val UpdateIntervalList =
     mapOf(
