@@ -64,7 +64,7 @@
     <string name="download_directory_desc">Videoların ve ses dosyalarının nerede saklanacağını seçin</string>
     <string name="permission_issue">Depolama izni sorunu</string>
     <string name="battery_configuration">Pil yapılandırması</string>
-    <string name="service_title">Seal indiriyor…</string>
+    <string name="service_title">Capella indiriyor…</string>
     <string name="unknown_error">Bilinmeyen hata</string>
     <string name="translate_desc">Hosted Weblate\'de bu uygulamanın çevrilmesine yardımcı olun</string>
     <string name="video_directory">Video klasörü</string>

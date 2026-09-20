@@ -11,7 +11,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import com.junkfood.seal.App.Companion.context
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.SettingsProvider
-import com.junkfood.seal.ui.page.AppEntry
+import com.junkfood.seal.ui.capella.CapellaSkeletonScreen
 import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.PreferenceUtil
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                         darkTheme = LocalDarkTheme.current.isDarkTheme(),
                         isHighContrastModeEnabled = LocalDarkTheme.current.isHighContrastModeEnabled,
                     ) {
-                        AppEntry(dialogViewModel = dialogViewModel)
+                        CapellaSkeletonScreen()
                     }
                 }
             }
