@@ -46,6 +46,9 @@ fun CapellaApp(viewModel: CapellaViewModel) {
     // Açılışta yt-dlp otomatik güncelleme kontrolü. Görünmez çalışır, motor özelliğidir.
     YtdlpUpdater()
 
+    // Capella'nın kendi sürüm kontrolü. Yeni sürüm varsa tek dokunuşluk pencere gösterir.
+    AppUpdateGate()
+
     // Platform gereği izinler: indirme bildirimi (Android 13+) ve dosya yazma (Android 9 ve altı).
     val required =
         when {

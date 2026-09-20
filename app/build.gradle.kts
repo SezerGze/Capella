@@ -47,8 +47,8 @@ android {
         applicationId = "com.capella.ai"
         minSdk = 26
         targetSdk = 35
-        versionCode = 200_000_150
-        check(versionCode == currentVersionCode)
+        // Tek kaynak: buildSrc/src/main/kotlin/Version.kt
+        versionCode = currentVersionCode
 
         versionName = baseVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

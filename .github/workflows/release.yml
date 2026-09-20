@@ -1,0 +1,89 @@
+name: Release
+
+# Sürümü yükseltmek için buildSrc/src/main/kotlin/Version.kt içindeki currentVersion'ı
+# değiştirmek yeterli; versionCode oradan türetiliyor. Sonra bu akışı elle çalıştır.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: temurin
+          cache: gradle
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v3
+
+      # İmza anahtarı depoda durmaz; GitHub secret'ından geri kurulur ve iş bitince
+      # runner ile birlikte yok olur.
+      - name: İmza anahtarını hazırla
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${KEYSTORE_BASE64:-}" ]; then
+            echo "KEYSTORE_BASE64 secret'ı tanımlı değil." >&2
+            exit 1
+          fi
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/capella.jks"
+          {
+            echo "storeFile=$RUNNER_TEMP/capella.jks"
+            echo "storePassword=$KEYSTORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > keystore.properties
+
+      - name: Derle
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleGenericRelease --no-daemon
+
+      # APK'ların gerçekten bizim anahtarımızla imzalandığını doğrula. İmzasız ya da yanlış
+      # anahtarla imzalı bir APK telefona kurulamaz, bunu burada yakalamak daha ucuz.
+      - name: İmzayı doğrula
+        run: |
+          set -euo pipefail
+          BUILD_TOOLS=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          for apk in app/build/outputs/apk/generic/release/*.apk; do
+            "$BUILD_TOOLS/apksigner" verify --print-certs "$apk" | grep -q "CN=Capella" \
+              || { echo "İmza doğrulanamadı: $apk" >&2; exit 1; }
+          done
+          echo "Tüm APK'lar doğrulandı."
+
+      - name: Sürüm adını oku
+        id: version
+        run: |
+          set -euo pipefail
+          NAME=$(jq -r '.elements[0].versionName' \
+            app/build/outputs/apk/generic/release/output-metadata.json)
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "Sürüm: $NAME"
+
+      # Release adı uygulamadaki sürüm karşılaştırıcısıyla ayrıştırılıyor, bu yüzden
+      # "2.0.1" ya da "2.0.1-alpha.3" biçiminde olmak zorunda.
+      - name: Release yayınla
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.name }}
+          name: ${{ steps.version.outputs.name }}
+          draft: false
+          prerelease: false
+          files: app/build/outputs/apk/generic/release/*.apk
+          fail_on_unmatched_files: true
