@@ -20,6 +20,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +35,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -140,17 +142,15 @@ fun HomeTab(viewModel: CapellaViewModel) {
     }
 }
 
-/** Logo: iç içe üç daire. Prototipteki 24 birimlik SVG'nin birebir karşılığı. */
+/** Kelime markasının solundaki profil ikonu. */
 @Composable
 private fun CapellaMark() {
-    Canvas(modifier = Modifier.size(26.dp)) {
-        val unit = size.minDimension / 24f
-        val center = Offset(12f * unit, 12f * unit)
-        val stroke = Stroke(width = 1.8f * unit)
-        drawCircle(CapellaColors.Accent, radius = 9.2f * unit, center = center, style = stroke)
-        drawCircle(CapellaColors.Accent, radius = 5.4f * unit, center = center, style = stroke)
-        drawCircle(CapellaColors.Accent, radius = 1.9f * unit, center = center)
-    }
+    Icon(
+        imageVector = Icons.Outlined.AccountCircle,
+        contentDescription = null,
+        modifier = Modifier.size(28.dp),
+        tint = CapellaColors.Accent,
+    )
 }
 
 @Composable

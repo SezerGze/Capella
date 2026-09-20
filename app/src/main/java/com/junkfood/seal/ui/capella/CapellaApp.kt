@@ -14,7 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FileDownload
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import android.Manifest
 import android.os.Build
@@ -24,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -83,12 +88,14 @@ private fun CapellaBottomNav(selected: CapellaTab, onSelect: (CapellaTab) -> Uni
             NavTab(
                 modifier = Modifier.weight(1f),
                 label = "İndir",
+                icon = Icons.Outlined.FileDownload,
                 active = selected == CapellaTab.Home,
                 onClick = { onSelect(CapellaTab.Home) },
             )
             NavTab(
                 modifier = Modifier.weight(1f),
                 label = "Geçmiş",
+                icon = Icons.Outlined.History,
                 active = selected == CapellaTab.History,
                 onClick = { onSelect(CapellaTab.History) },
             )
@@ -97,7 +104,13 @@ private fun CapellaBottomNav(selected: CapellaTab, onSelect: (CapellaTab) -> Uni
 }
 
 @Composable
-private fun NavTab(modifier: Modifier, label: String, active: Boolean, onClick: () -> Unit) {
+private fun NavTab(
+    modifier: Modifier,
+    label: String,
+    icon: ImageVector,
+    active: Boolean,
+    onClick: () -> Unit,
+) {
     val tint = if (active) CapellaColors.Accent else CapellaColors.TextTertiary
     Column(
         modifier =
@@ -112,11 +125,11 @@ private fun NavTab(modifier: Modifier, label: String, active: Boolean, onClick: 
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Box(
-            modifier =
-                Modifier.size(20.dp)
-                    .clip(RoundedCornerShape(7.dp))
-                    .background(if (active) CapellaColors.Accent else CapellaColors.DotInactive)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(22.dp),
+            tint = tint,
         )
         Text(
             text = label,
