@@ -134,6 +134,12 @@ class CapellaViewModel(private val downloader: DownloaderV2) : ViewModel() {
         scheduleResolve(value)
     }
 
+    /** Paylas menusunden gelen baglanti (YouTube -> Capella). */
+    fun receiveSharedUrl(value: String) {
+        tab = CapellaTab.Home
+        onUrlChange(value.trim())
+    }
+
     fun pasteFromClipboard() {
         val text =
             runCatching { App.clipboard.primaryClip?.getItemAt(0)?.text?.toString() }.getOrNull()

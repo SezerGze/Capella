@@ -15,7 +15,6 @@ import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.SettingsProvider
 import com.junkfood.seal.ui.capella.CapellaApp
 import com.junkfood.seal.ui.capella.CapellaViewModel
-import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.matchUrlFromSharedText
@@ -25,7 +24,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.compose.KoinContext
 
 class MainActivity : AppCompatActivity() {
-    private val dialogViewModel: DownloadDialogViewModel by viewModel()
     private val capellaViewModel: CapellaViewModel by viewModel()
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -39,6 +37,9 @@ class MainActivity : AppCompatActivity() {
             statusBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
         )
+
+        // Uygulama kapaliyken paylasilan baglanti da yakalanmali.
+        intent.getSharedURL()?.let { capellaViewModel.receiveSharedUrl(it) }
 
         context = this.baseContext
         setContent {
@@ -58,10 +59,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val url = intent.getSharedURL()
-        if (url != null) {
-            dialogViewModel.postAction(DownloadDialogViewModel.Action.ShowSheet(listOf(url)))
-        }
+        intent.getSharedURL()?.let { capellaViewModel.receiveSharedUrl(it) }
     }
 
     private fun Intent.getSharedURL(): String? {

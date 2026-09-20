@@ -11,8 +11,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.SettingsProvider
-import com.junkfood.seal.ui.component.FilledButtonWithIcon
 import com.junkfood.seal.ui.theme.SealTheme
 
 class CrashReportActivity : ComponentActivity() {
@@ -66,15 +64,15 @@ fun CrashReportPage(errorMessage: String = "ERROR_EXAMPLE", onClick: () -> Unit 
         bottomBar = {
             androidx.compose.material3.HorizontalDivider()
 
-            FilledButtonWithIcon(
+            Button(
                 modifier =
                     Modifier.fillMaxWidth()
                         .navigationBarsPadding()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                 onClick = onClick,
-                icon = Icons.Outlined.BugReport,
-                text = stringResource(R.string.copy_and_exit),
-            )
+            ) {
+                Text(text = stringResource(R.string.copy_and_exit))
+            }
         },
     ) {
         Column(modifier = Modifier.padding(it).verticalScroll(rememberScrollState())) {

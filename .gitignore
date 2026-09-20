@@ -21,3 +21,6 @@ local.properties
 *.jks
 *.keystore
 /secrets/
+
+# IDE
+/.idea/
