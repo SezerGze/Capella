@@ -1,6 +1,7 @@
 package com.junkfood.seal.ui.capella
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.background
@@ -20,9 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,8 +38,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.junkfood.seal.R
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -142,14 +142,13 @@ fun HomeTab(viewModel: CapellaViewModel) {
     }
 }
 
-/** Kelime markasının solundaki profil ikonu. */
+/** Kelime markasının solundaki Capella logosu. */
 @Composable
 private fun CapellaMark() {
-    Icon(
-        imageVector = Icons.Outlined.AccountCircle,
+    Image(
+        painter = painterResource(R.drawable.capella_mark),
         contentDescription = null,
-        modifier = Modifier.size(28.dp),
-        tint = CapellaColors.Accent,
+        modifier = Modifier.size(30.dp).clip(RoundedCornerShape(9.dp)),
     )
 }
 
