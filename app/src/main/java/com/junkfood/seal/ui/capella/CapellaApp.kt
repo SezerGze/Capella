@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -81,11 +83,16 @@ fun CapellaApp(viewModel: CapellaViewModel) {
 private fun CapellaBottomNav(selected: CapellaTab, onSelect: (CapellaTab) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().background(CapellaColors.Surface)) {
         HorizontalDivider(thickness = 1.dp, color = CapellaColors.BorderNav)
+        val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
         Row(
             modifier =
                 Modifier.fillMaxWidth()
-                    .navigationBarsPadding()
-                    .padding(start = 26.dp, end = 26.dp, top = 10.dp, bottom = 12.dp),
+                    .padding(
+                        start = 26.dp,
+                        end = 26.dp,
+                        top = 6.dp,
+                        bottom = maxOf(bottomInset, 10.dp),
+                    ),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             NavTab(
@@ -124,14 +131,14 @@ private fun NavTab(
                     indication = null,
                     onClick = onClick,
                 )
-                .padding(vertical = 9.dp),
+                .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(24.dp),
             tint = tint,
         )
         Text(

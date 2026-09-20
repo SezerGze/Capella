@@ -13,32 +13,32 @@ import androidx.compose.ui.unit.sp
 import com.junkfood.seal.R
 
 /**
- * Capella tasarım dizgesi. Değerler `Video Indirici.dc.html` prototipinden birebir alındı;
+ * Capella tasarım dizgesi. Palet uzay moru; Değerler `Video Indirici.dc.html` prototipinden birebir alındı;
  * prototipteki 1 CSS px = 1 dp.
  */
 object CapellaColors {
-    val Accent = Color(0xFFE1447A)
-    val AccentSoft = Color(0xFFFDEFF4)
-    val AccentMuted = Color(0xFFEDA6C2)
+    val Accent = Color(0xFF6D3FD4)
+    val AccentSoft = Color(0xFFEFEAFD)
+    val AccentMuted = Color(0xFFB7A6EC)
 
-    val Page = Color(0xFFF4F2F3)
+    val Page = Color(0xFFF4F2F8)
     val Surface = Color(0xFFFFFFFF)
-    val SurfaceMuted = Color(0xFFFAF8F9)
-    val NeutralBadge = Color(0xFFF3EFF1)
+    val SurfaceMuted = Color(0xFFF9F8FD)
+    val NeutralBadge = Color(0xFFF1EEF7)
 
-    val Border = Color(0xFFEFE3E8)
-    val BorderNav = Color(0xFFF1E9EC)
+    val Border = Color(0xFFE5DFF3)
+    val BorderNav = Color(0xFFEBE7F5)
 
-    val TextPrimary = Color(0xFF221A1E)
-    val TextSecondary = Color(0xFF8A7F84)
-    val TextTertiary = Color(0xFF7C7176)
+    val TextPrimary = Color(0xFF1D1733)
+    val TextSecondary = Color(0xFF7C7690)
+    val TextTertiary = Color(0xFF6F6983)
 
-    val ProgressTrack = Color(0xFFF0E3E9)
-    val DotInactive = Color(0xFFDDD2D7)
+    val ProgressTrack = Color(0xFFE7E0F6)
+    val DotInactive = Color(0xFFD2CBE4)
 
     /** Yer tutucu küçük resmin çizgili deseni */
-    val PlaceholderLight = Color(0xFFF0E6EA)
-    val PlaceholderDark = Color(0xFFE7DBE1)
+    val PlaceholderLight = Color(0xFFE9E3F5)
+    val PlaceholderDark = Color(0xFFDCD4EE)
 }
 
 private fun manrope(weight: Int) =
@@ -60,7 +60,7 @@ object CapellaDimens {
     val ScreenPaddingTop = 12.dp
 
     /** Alt gezinme çubuğunun altında kalmaması için içerik alt boşluğu */
-    val ContentPaddingBottom = 116.dp
+    val ContentPaddingBottom = 100.dp
 
     val CardRadius = 16.dp
     val CardPadding = 12.dp
