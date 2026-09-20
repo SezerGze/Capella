@@ -1,6 +1,8 @@
 package com.junkfood.seal.ui.capella
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,13 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -30,6 +37,7 @@ import com.junkfood.seal.util.CONVERT_MP3
 
 @Composable
 fun HistoryTab(viewModel: CapellaViewModel) {
+    val context = LocalContext.current
     val completed by viewModel.completed.collectAsStateWithLifecycle()
     val active = viewModel.taskStates().toActiveRows()
     val rows = active + completed
@@ -74,18 +82,32 @@ fun HistoryTab(viewModel: CapellaViewModel) {
             }
         }
 
-        items(items = rows, key = { it.key }) { row -> HistoryItem(row) }
+        items(items = rows, key = { it.key }) { row ->
+            HistoryItem(
+                row = row,
+                onCancel = { row.task?.let(viewModel::cancel) },
+                onOpen = {
+                    row.path?.let { path ->
+                        viewModel.openFile(path) {
+                            Toast.makeText(context, "Dosya açılamadı", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                },
+            )
+        }
     }
 }
 
 @Composable
-private fun HistoryItem(row: HistoryRow) {
+private fun HistoryItem(row: HistoryRow, onCancel: () -> Unit, onOpen: () -> Unit) {
     val isVideo = row.kind.equals("MP4", ignoreCase = true)
+    val acilabilir = row.task == null && row.path != null
     Row(
         modifier =
             Modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(CapellaColors.SurfaceMuted)
+                .then(if (acilabilir) Modifier.clickable(onClick = onOpen) else Modifier)
                 .padding(CapellaDimens.CardPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(13.dp),
@@ -149,13 +171,31 @@ private fun HistoryItem(row: HistoryRow) {
             }
         }
 
-        Text(
-            text = row.right,
-            fontFamily = Manrope,
-            fontSize = CapellaType.RowMetaSize,
-            fontWeight = FontWeight.W700,
-            color = CapellaColors.TextTertiary,
-        )
+        if (row.task != null) {
+            Box(
+                modifier =
+                    Modifier.size(30.dp)
+                        .clip(CircleShape)
+                        .background(CapellaColors.AccentSoft)
+                        .clickable(onClick = onCancel),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Close,
+                    contentDescription = "İptal",
+                    modifier = Modifier.size(17.dp),
+                    tint = CapellaColors.Accent,
+                )
+            }
+        } else {
+            Text(
+                text = row.right,
+                fontFamily = Manrope,
+                fontSize = CapellaType.RowMetaSize,
+                fontWeight = FontWeight.W700,
+                color = CapellaColors.TextTertiary,
+            )
+        }
     }
 }
 
@@ -176,6 +216,7 @@ private fun Map<Task, Task.State>.toActiveRows(): List<HistoryRow> =
                     (downloadState as? DownloadState.Running)?.progress?.takeIf { it >= 0f },
                 path = null,
                 sizeBytes = 0L,
+                task = task,
             )
         }
 

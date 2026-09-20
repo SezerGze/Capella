@@ -14,6 +14,7 @@ import com.junkfood.seal.util.CONVERT_MP3
 import com.junkfood.seal.util.DatabaseUtil
 import com.junkfood.seal.util.DownloadUtil
 import com.junkfood.seal.util.FORMAT_COMPATIBILITY
+import com.junkfood.seal.util.FileUtil
 import com.junkfood.seal.util.M4A
 import com.junkfood.seal.util.RES_1080P
 import com.junkfood.seal.util.RES_720P
@@ -95,6 +96,8 @@ data class HistoryRow(
     val progress: Float?,
     val path: String?,
     val sizeBytes: Long,
+    /** Yalnızca süren indirmelerde dolu; iptal için gerekli. */
+    val task: Task? = null,
 )
 
 private val URL_PATTERN = Regex("""^\s*(https?://|www\.)\S{4,}""", RegexOption.IGNORE_CASE)
@@ -179,8 +182,15 @@ class CapellaViewModel(private val downloader: DownloaderV2) : ViewModel() {
         tab = CapellaTab.History
     }
 
+    /** Önce yt-dlp sürecini durdurur, sonra satırı listeden kaldırır. */
     fun cancel(task: Task) {
         downloader.cancel(task)
+        downloader.remove(task)
+    }
+
+    /** Biten bir dosyayı sistemin oynatıcısında açar. */
+    fun openFile(path: String, onFailure: () -> Unit) {
+        FileUtil.openFile(path) { onFailure() }
     }
 
     /** Süren indirmeler. Compose'un gözlemlediği bir harita, doğrudan okunabilir. */
